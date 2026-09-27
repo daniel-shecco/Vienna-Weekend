@@ -1,49 +1,27 @@
 # Vienna Weekend Guide
 
-Every Friday at 07:00 (Vienna time) a GitHub Actions workflow researches
-what's on in Vienna for the coming Saturday and Sunday and publishes a page to
-GitHub Pages. The page covers:
+A weekly page of family-friendly events and daytime techno/electronic parties
+in Vienna, for the coming Saturday and Sunday. Events are sorted by date and
+start time and show the venue, price and a link to the original listing.
 
-- family-oriented events (kids' theatre, museum programmes, zoo, markets, festivals…)
-- techno and electronic music parties that happen during the day
-
-Events are sorted by date and start time and show the venue, price and a link
-to the original listing.
+Page: https://daniel-shecco.github.io/Vienna-Weekend/
 
 ## How it works
 
-1. `src/find-events.mjs` runs a few short web searches with Claude Sonnet 5
-   (family events, day raves, kids' theatre and museums), each allowed to read
-   one listing page, then converts the findings into structured JSON.
-2. `src/events.mjs` drops events outside the weekend, without a valid link,
-   or duplicated, and sorts the rest.
-3. `src/render.mjs` writes `site/index.html` (plus `site/events.json`).
-4. `.github/workflows/weekend.yml` runs this on Fridays and deploys `site/`
-   to GitHub Pages. The research notes are kept as a workflow artifact for 30 days.
+1. Every Friday at about 07:00 Vienna time, a **Claude Code routine** follows
+   [ROUTINE.md](ROUTINE.md): it researches the weekend's events on the web and
+   pushes them to `data/events.json`. This uses the Claude plan's usage, not
+   API credits.
+2. The push triggers `.github/workflows/weekend.yml`, which renders the page
+   (`src/render.mjs`) and publishes it to GitHub Pages. No API keys or paid
+   calls are involved.
 
-## Cost
-
-Each call is priced from its token and search usage, and the run stops
-searching before it could go over **$0.35** (about €0.30). The
-per-call breakdown appears in the workflow run summary and in
-`events.json`. To change the cap, add a repository variable `MAX_COST_USD`
-(Settings → Secrets and variables → Actions → Variables).
-
-## Setup
-
-1. **Settings → Secrets and variables → Actions**: add a secret named
-   `ANTHROPIC_API_KEY`. If the key isn't scoped to a workspace, also add
-   `ANTHROPIC_WORKSPACE_ID` with the ID of the workspace to bill.
-2. **Settings → Pages → Build and deployment → Source**: choose
-   **GitHub Actions**.
-3. **Actions → Vienna weekend guide → Run workflow** to publish the first page
-   without waiting for Friday.
+While the routine is researching, the page shows a "searching" message.
 
 ## Local development
 
 ```sh
-npm install
 npm test
-npm run build:sample                         # renders fixtures/sample-events.json to site/
-ANTHROPIC_API_KEY=... npm run build          # real run
+npm run build:sample        # renders fixtures/sample-events.json to site/
+npm run build               # renders data/events.json to site/
 ```

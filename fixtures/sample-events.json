@@ -159,5 +159,7 @@
       "is_free": true,
       "url": "https://example.com/flea-market"
     }
-  ]
+  ],
+  "status": "done",
+  "updated": "Fri 2 Oct, 07:00"
 }

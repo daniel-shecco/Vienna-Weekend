@@ -1,11 +1,12 @@
-name: Vienna weekend guide
+name: Publish weekend guide
 
+# Builds the page from data/events.json and publishes it to GitHub Pages.
+# The data is researched and pushed every Friday by a Claude Code routine
+# (see ROUTINE.md). No API keys or paid calls are used here.
 on:
-  # Friday schedule switched off until the cost per run is agreed. To turn it
-  # back on, restore these (07:00 Vienna in summer / winter):
-  # schedule:
-  #   - cron: '0 5 * * 5'
-  #   - cron: '0 6 * * 5'
+  push:
+    branches: [main]
+    paths: [data/events.json]
   workflow_dispatch:
 
 permissions:
@@ -15,123 +16,23 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    outputs:
-      run: ${{ steps.clock.outputs.run }}
-    steps:
-      - name: Check Vienna time
-        id: clock
-        env:
-          SCHEDULE: ${{ github.event.schedule }}
-        run: |
-          offset=$(TZ=Europe/Vienna date +%z)
-          if [ -z "$SCHEDULE" ] \
-             || { [ "$offset" = "+0200" ] && [ "$SCHEDULE" = "0 5 * * 5" ]; } \
-             || { [ "$offset" = "+0100" ] && [ "$SCHEDULE" = "0 6 * * 5" ]; }; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "Vienna is at UTC$offset; skipping the '$SCHEDULE' trigger."
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          fi
-
-  # Publish a "searching" page straight away so visitors never hit a 404
-  # or last week's events while the research runs.
-  announce:
-    needs: check
-    if: needs.check.outputs.run == 'true'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: node src/status.mjs searching --out status
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          name: status-searching
-          path: status
-      - uses: actions/deploy-pages@v4
-        with:
-          artifact_name: status-searching
-
-  build:
-    needs: [check, announce]
-    if: needs.check.outputs.run == 'true' && !cancelled()
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install
-        run: npm ci
-
-      - name: Test
-        run: npm test
-
-      - name: Find events and build page
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
-          # Spending cap per run in USD (default 0.35). Set a repository variable to change it.
-          MAX_COST_USD: ${{ vars.MAX_COST_USD }}
-        run: npm run build
-
-      - name: Keep research notes
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: research
-          path: |
-            site/research-notes.md
-            site/events.json
-          if-no-files-found: ignore
-          retention-days: 30
-
-      - name: Drop notes from the public site
-        run: rm -f site/research-notes.md
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-  deploy:
-    needs: build
+  publish:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
-
-  # If the search or its deploy fails, replace the "searching" page with a
-  # message instead of leaving it spinning.
-  report-failure:
-    needs: [check, build, deploy]
-    if: always() && needs.check.outputs.run == 'true' && (needs.build.result == 'failure' || needs.deploy.result == 'failure')
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-    steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node src/status.mjs failed --out status
+      - run: npm test
+      - run: node src/build.mjs data/events.json --out site
       - uses: actions/upload-pages-artifact@v3
         with:
-          name: status-failed
-          path: status
-      - uses: actions/deploy-pages@v4
-        with:
-          artifact_name: status-failed
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

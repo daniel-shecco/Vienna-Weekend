@@ -6,14 +6,11 @@
   "description": "Weekly page of family-friendly events and daytime electronic parties in Vienna.",
   "scripts": {
     "build": "node src/build.mjs",
-    "build:sample": "node src/build.mjs --fixture fixtures/sample-events.json",
+    "build:sample": "node src/build.mjs fixtures/sample-events.json",
+    "weekend": "node src/next-weekend.mjs",
     "test": "node --test"
   },
   "engines": {
     "node": ">=22"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.128.0",
-    "zod": "^4.6.5"
   }
 }

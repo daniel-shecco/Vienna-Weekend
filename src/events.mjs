@@ -1,23 +1,22 @@
-// Shape of an event, plus the checks and ordering applied before rendering.
-import { z } from 'zod';
+// Checks and ordering applied to the event list before rendering.
+//
+// Each event in data/events.json looks like:
+//   {
+//     "title": "Kids' flea market",
+//     "date": "2026-10-03",              // YYYY-MM-DD
+//     "start_time": "09:00",             // HH:MM, 24-hour, Vienna time
+//     "end_time": "14:00",               // or null
+//     "venue": "Karmelitermarkt",
+//     "district": "2nd district, Leopoldstadt",   // or null
+//     "description": "One or two plain sentences.",
+//     "category": "family",              // "family" | "daytime_electronic" | "both"
+//     "age_range": "All ages",           // or null
+//     "price": "Free",                   // e.g. "€12 adults · €6 kids", or null
+//     "is_free": true,
+//     "url": "https://…"                 // the event's own listing
+//   }
 
-export const EventSchema = z.object({
-  title: z.string(),
-  date: z.string().describe('YYYY-MM-DD'),
-  start_time: z.string().describe('HH:MM, 24-hour, Vienna time'),
-  end_time: z.string().nullable().describe('HH:MM, 24-hour, or null if unknown'),
-  venue: z.string(),
-  district: z.string().nullable().describe('e.g. "2nd district, Leopoldstadt"'),
-  description: z.string().describe('One or two plain sentences'),
-  category: z.enum(['family', 'daytime_electronic', 'both']),
-  age_range: z.string().nullable().describe('e.g. "Ages 4+", "All ages", "18+"'),
-  price: z.string().nullable().describe('e.g. "€12 adults · €6 kids", "Free", or null if unknown'),
-  is_free: z.boolean(),
-  url: z.string().describe('Link to the original event listing'),
-});
-
-export const EventListSchema = z.object({ events: z.array(EventSchema) });
-
+const CATEGORIES = new Set(['family', 'daytime_electronic', 'both']);
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 /**
@@ -30,6 +29,7 @@ export function cleanEvents(events, { saturday, sunday }) {
   for (const ev of events) {
     if (ev.date !== saturday && ev.date !== sunday) continue;
     if (!TIME.test(ev.start_time)) continue;
+    if (!CATEGORIES.has(ev.category) || !ev.title || !ev.venue) continue;
     if (ev.end_time && !TIME.test(ev.end_time)) ev.end_time = null;
     let url;
     try {

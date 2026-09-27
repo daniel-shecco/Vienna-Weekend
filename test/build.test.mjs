@@ -35,3 +35,13 @@ test('renderPage escapes content and links each event', () => {
   assert.equal((html.match(/class="link"/g) ?? []).length, events.length);
   assert.ok(html.includes('Sat 3 – Sun 4 October 2026'));
 });
+
+test('renderStatusPage shows a self-refreshing searching page and a static failure page', async () => {
+  const { renderStatusPage } = await import('../src/render.mjs');
+  const searching = renderStatusPage({ weekend: fixture.weekend, state: 'searching', updated: 'Fri 2 Oct, 07:00' });
+  assert.ok(searching.includes('http-equiv="refresh"'));
+  assert.ok(searching.includes('Searching for this weekend'));
+  const failed = renderStatusPage({ weekend: fixture.weekend, state: 'failed', updated: 'Fri 2 Oct, 07:20' });
+  assert.ok(!failed.includes('http-equiv="refresh"'));
+  assert.ok(failed.includes('didn’t finish'));
+});

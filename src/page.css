@@ -116,3 +116,13 @@
     .link { margin-left: 0; width: 100%; padding-top: 4px; }
   }
   .empty { padding: 32px 0; color: var(--muted); }
+  .status { padding: 56px 0 72px; max-width: 60ch; }
+  .status h2 { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 28px; margin: 0 0 10px; }
+  .status p { margin: 0 0 10px; color: var(--muted); }
+  .spinner {
+    width: 36px; height: 36px; margin-bottom: 20px; border-radius: 50%;
+    border: 4px solid var(--line); border-top-color: var(--accent);
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }

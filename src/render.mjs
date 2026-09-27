@@ -121,3 +121,61 @@ ${JS}</script>
 </html>
 `;
 }
+
+const STATUS = {
+  searching: {
+    heading: 'Searching for this weekend’s events…',
+    lines: [
+      'We’re going through Vienna’s event listings for family-friendly things to do and daytime electronic parties.',
+      'This usually takes a few minutes. The page reloads every minute and shows the guide as soon as it’s ready.',
+    ],
+    refresh: 60,
+  },
+  failed: {
+    heading: 'This week’s search didn’t finish',
+    lines: [
+      'Something went wrong while looking for events, so there’s no guide for this weekend yet.',
+      'The next update runs on Friday at 07:00 (Vienna time).',
+    ],
+  },
+};
+
+/** A placeholder page shown while a search runs, or after one fails. */
+export function renderStatusPage({ weekend, state, updated }) {
+  const s = STATUS[state];
+  const range = weekendRangeLabel(weekend);
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+${s.refresh ? `<meta http-equiv="refresh" content="${s.refresh}">\n` : ''}<title>Vienna Weekend Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+${CSS}</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">Vienna Weekend Guide</span>
+    <h1>This weekend in Vienna</h1>
+    <div class="meta">
+      <span><strong>${esc(range)}</strong></span>
+      <span>${state === 'searching' ? 'Started' : 'Updated'} ${esc(updated)}</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <main class="status" aria-live="polite">
+${state === 'searching' ? '    <div class="spinner" role="img" aria-label="Searching"></div>\n' : ''}    <h2>${esc(s.heading)}</h2>
+${s.lines.map((l) => `    <p>${esc(l)}</p>`).join('\n')}
+  </main>
+</div>
+</body>
+</html>
+`;
+}

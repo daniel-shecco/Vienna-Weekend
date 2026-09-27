@@ -3,7 +3,7 @@ name: Vienna weekend guide
 on:
   schedule:
     # 07:00 Vienna time on Fridays. GitHub cron runs in UTC, so both offsets are
-    # scheduled and the "Check Vienna time" step keeps only the one that matches.
+    # scheduled and the "check" job keeps only the one that matches.
     - cron: '0 5 * * 5' # 07:00 in summer (CEST, UTC+2)
     - cron: '0 6 * * 5' # 07:00 in winter (CET, UTC+1)
   workflow_dispatch:
@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     outputs:
       run: ${{ steps.clock.outputs.run }}
@@ -38,32 +38,54 @@ jobs:
             echo "run=false" >> "$GITHUB_OUTPUT"
           fi
 
+  # Publish a "searching" page straight away so visitors never hit a 404
+  # or last week's events while the research runs.
+  announce:
+    needs: check
+    if: needs.check.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
       - uses: actions/checkout@v4
-        if: steps.clock.outputs.run == 'true'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node src/status.mjs searching --out status
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          name: status-searching
+          path: status
+      - uses: actions/deploy-pages@v4
+        with:
+          artifact_name: status-searching
+
+  build:
+    needs: [check, announce]
+    if: needs.check.outputs.run == 'true' && !cancelled()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
-        if: steps.clock.outputs.run == 'true'
         with:
           node-version: 22
           cache: npm
 
       - name: Install
-        if: steps.clock.outputs.run == 'true'
         run: npm ci
 
       - name: Test
-        if: steps.clock.outputs.run == 'true'
         run: npm test
 
       - name: Find events and build page
-        if: steps.clock.outputs.run == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
         run: npm run build
 
       - name: Keep research notes
-        if: always() && steps.clock.outputs.run == 'true'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: research
@@ -74,17 +96,14 @@ jobs:
           retention-days: 30
 
       - name: Drop notes from the public site
-        if: steps.clock.outputs.run == 'true'
         run: rm -f site/research-notes.md
 
       - uses: actions/upload-pages-artifact@v3
-        if: steps.clock.outputs.run == 'true'
         with:
           path: site
 
   deploy:
     needs: build
-    if: needs.build.outputs.run == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -92,3 +111,25 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # If the search or its deploy fails, replace the "searching" page with a
+  # message instead of leaving it spinning.
+  report-failure:
+    needs: [check, build, deploy]
+    if: always() && needs.check.outputs.run == 'true' && (needs.build.result == 'failure' || needs.deploy.result == 'failure')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node src/status.mjs failed --out status
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          name: status-failed
+          path: status
+      - uses: actions/deploy-pages@v4
+        with:
+          artifact_name: status-failed

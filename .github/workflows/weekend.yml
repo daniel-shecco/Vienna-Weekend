@@ -1,11 +1,11 @@
 name: Vienna weekend guide
 
 on:
-  schedule:
-    # 07:00 Vienna time on Fridays. GitHub cron runs in UTC, so both offsets are
-    # scheduled and the "check" job keeps only the one that matches.
-    - cron: '0 5 * * 5' # 07:00 in summer (CEST, UTC+2)
-    - cron: '0 6 * * 5' # 07:00 in winter (CET, UTC+1)
+  # Friday schedule switched off until the cost per run is agreed. To turn it
+  # back on, restore these (07:00 Vienna in summer / winter):
+  # schedule:
+  #   - cron: '0 5 * * 5'
+  #   - cron: '0 6 * * 5'
   workflow_dispatch:
 
 permissions:

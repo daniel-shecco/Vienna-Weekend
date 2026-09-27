@@ -1,0 +1,39 @@
+# Vienna Weekend Guide
+
+Every Friday at 07:00 (Vienna time) a GitHub Actions workflow researches
+what's on in Vienna for the coming Saturday and Sunday and publishes a page to
+GitHub Pages. The page covers:
+
+- family-oriented events (kids' theatre, museum programmes, zoo, markets, festivals…)
+- techno and electronic music parties that happen during the day
+
+Events are sorted by date and start time and show the venue, price and a link
+to the original listing.
+
+## How it works
+
+1. `src/find-events.mjs` asks Claude (with web search and web fetch) to find
+   the weekend's events, then converts its findings into structured JSON.
+2. `src/events.mjs` drops events outside the weekend, without a valid link,
+   or duplicated, and sorts the rest.
+3. `src/render.mjs` writes `site/index.html` (plus `site/events.json`).
+4. `.github/workflows/weekend.yml` runs this on Fridays and deploys `site/`
+   to GitHub Pages. The research notes are kept as a workflow artifact for 30 days.
+
+## Setup
+
+1. **Settings → Secrets and variables → Actions**: add a secret named
+   `ANTHROPIC_API_KEY`.
+2. **Settings → Pages → Build and deployment → Source**: choose
+   **GitHub Actions**.
+3. **Actions → Vienna weekend guide → Run workflow** to publish the first page
+   without waiting for Friday.
+
+## Local development
+
+```sh
+npm install
+npm test
+npm run build:sample                         # renders fixtures/sample-events.json to site/
+ANTHROPIC_API_KEY=... npm run build          # real run
+```

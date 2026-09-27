@@ -1,0 +1,19 @@
+{
+  "name": "vienna-weekend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Weekly page of family-friendly events and daytime electronic parties in Vienna.",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "build:sample": "node src/build.mjs --fixture fixtures/sample-events.json",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "zod": "^4.6.5"
+  }
+}

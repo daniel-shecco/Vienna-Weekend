@@ -1,0 +1,93 @@
+name: Vienna weekend guide
+
+on:
+  schedule:
+    # 07:00 Vienna time on Fridays. GitHub cron runs in UTC, so both offsets are
+    # scheduled and the "Check Vienna time" step keeps only the one that matches.
+    - cron: '0 5 * * 5' # 07:00 in summer (CEST, UTC+2)
+    - cron: '0 6 * * 5' # 07:00 in winter (CET, UTC+1)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.clock.outputs.run }}
+    steps:
+      - name: Check Vienna time
+        id: clock
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          offset=$(TZ=Europe/Vienna date +%z)
+          if [ -z "$SCHEDULE" ] \
+             || { [ "$offset" = "+0200" ] && [ "$SCHEDULE" = "0 5 * * 5" ]; } \
+             || { [ "$offset" = "+0100" ] && [ "$SCHEDULE" = "0 6 * * 5" ]; }; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Vienna is at UTC$offset; skipping the '$SCHEDULE' trigger."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.clock.outputs.run == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.clock.outputs.run == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        if: steps.clock.outputs.run == 'true'
+        run: npm ci
+
+      - name: Test
+        if: steps.clock.outputs.run == 'true'
+        run: npm test
+
+      - name: Find events and build page
+        if: steps.clock.outputs.run == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npm run build
+
+      - name: Keep research notes
+        if: always() && steps.clock.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: research
+          path: |
+            site/research-notes.md
+            site/events.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Drop notes from the public site
+        if: steps.clock.outputs.run == 'true'
+        run: rm -f site/research-notes.md
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.clock.outputs.run == 'true'
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

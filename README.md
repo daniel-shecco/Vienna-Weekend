@@ -23,7 +23,8 @@ to the original listing.
 ## Setup
 
 1. **Settings → Secrets and variables → Actions**: add a secret named
-   `ANTHROPIC_API_KEY`.
+   `ANTHROPIC_API_KEY`. If the key isn't scoped to a workspace, also add
+   `ANTHROPIC_WORKSPACE_ID` with the ID of the workspace to bill.
 2. **Settings → Pages → Build and deployment → Source**: choose
    **GitHub Actions**.
 3. **Actions → Vienna weekend guide → Run workflow** to publish the first page

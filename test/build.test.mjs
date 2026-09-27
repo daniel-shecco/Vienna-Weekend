@@ -14,8 +14,9 @@ test('upcomingWeekend picks the Saturday and Sunday after a Friday run', () => {
   assert.deepEqual(upcomingWeekend(new Date('2026-12-04T06:00:00Z')), { saturday: '2026-12-05', sunday: '2026-12-06' });
   // Late Friday UTC is already Saturday in Vienna
   assert.deepEqual(upcomingWeekend(new Date('2026-10-02T23:30:00Z')), { saturday: '2026-10-03', sunday: '2026-10-04' });
-  // Run on a Sunday covers the current weekend
-  assert.deepEqual(upcomingWeekend(new Date('2026-10-04T10:00:00Z')), { saturday: '2026-10-03', sunday: '2026-10-04' });
+  // Run on a Saturday covers that weekend; run on a Sunday looks ahead to the next one
+  assert.deepEqual(upcomingWeekend(new Date('2026-10-03T10:00:00Z')), { saturday: '2026-10-03', sunday: '2026-10-04' });
+  assert.deepEqual(upcomingWeekend(new Date('2026-09-27T16:40:00Z')), { saturday: '2026-10-03', sunday: '2026-10-04' });
 });
 
 test('cleanEvents drops out-of-range, unlinked and duplicate events, and sorts by date and time', () => {

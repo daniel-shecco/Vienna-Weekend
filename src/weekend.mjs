@@ -14,13 +14,13 @@ function addDays(isoDate, days) {
 }
 
 /**
- * The Saturday and Sunday this run covers: the coming weekend, or the
- * current one when run on a Saturday or Sunday.
+ * The Saturday and Sunday this run covers: the next Saturday on or after
+ * today, so a run on Sunday already looks ahead to the following weekend.
  */
 export function upcomingWeekend(now = new Date()) {
   const today = viennaToday(now);
   const dow = new Date(`${today}T12:00:00Z`).getUTCDay(); // 0 = Sunday
-  const saturday = dow === 0 ? addDays(today, -1) : addDays(today, (6 - dow + 7) % 7);
+  const saturday = addDays(today, (6 - dow + 7) % 7);
   return { saturday, sunday: addDays(saturday, 1) };
 }
 

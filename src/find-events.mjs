@@ -116,7 +116,9 @@ ${notes}
 }
 
 export async function findEvents(weekend) {
-  const client = new Anthropic();
+  // Keys that aren't scoped to a workspace need the workspace named on each request.
+  const workspace = process.env.ANTHROPIC_WORKSPACE_ID;
+  const client = new Anthropic(workspace ? { defaultHeaders: { 'anthropic-workspace-id': workspace } } : {});
   const notes = await research(client, weekend);
   const events = await extract(client, notes, weekend);
   return { notes, events };

@@ -82,6 +82,8 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
+          # Spending cap per run in USD (default 0.30). Set a repository variable to change it.
+          MAX_COST_USD: ${{ vars.MAX_COST_USD }}
         run: npm run build
 
       - name: Keep research notes

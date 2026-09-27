@@ -1,46 +1,78 @@
 // Asks Claude to research the weekend's events on the web, then turns the
-// findings into structured data.
+// findings into structured data. Every call is costed, and the run stops
+// searching before it could go over MAX_COST_USD.
 import Anthropic from '@anthropic-ai/sdk';
-import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
+import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { EventListSchema } from './events.mjs';
 import { dayLabels } from './weekend.mjs';
 
-const MODEL = 'claude-opus-5';
-// On a policy decline, the API re-runs the request on Anthropic's recommended fallback model.
-const FALLBACK = { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' };
-const MAX_CONTINUATIONS = 8;
+const MODEL = 'claude-haiku-4-5';
 
-function researchPrompt({ saturday, sunday }) {
+// Claude Haiku 4.5 list prices, in USD.
+const PRICE = {
+  input: 1 / 1e6,
+  output: 5 / 1e6,
+  cacheWrite: 1.25 / 1e6,
+  cacheRead: 0.1 / 1e6,
+  search: 10 / 1000,
+};
+
+const BUDGET_USD = Number(process.env.MAX_COST_USD || 0.3);
+// Upper estimates used to decide whether another call still fits the budget.
+// The per-search estimate is raised to the most expensive search seen so far.
+const SEARCH_ESTIMATE_USD = 0.08;
+const EXTRACT_RESERVE_USD = 0.05;
+
+const SEARCHES_PER_QUERY = 2;
+
+function queries({ saturday, sunday }) {
   const sat = dayLabels(saturday);
   const sun = dayLabels(sunday);
-  return `Find events in Vienna, Austria for the weekend of Saturday ${sat.date} (${saturday}) and Sunday ${sun.date} (${sunday}).
+  const de = (iso) => {
+    const d = new Date(`${iso}T12:00:00Z`);
+    return `${d.getUTCDate()}. ${d.toLocaleDateString('de-AT', { month: 'long', timeZone: 'UTC' })}`;
+  };
+  const year = saturday.slice(0, 4);
+  const family = 'family-oriented events: things parents can do with children';
+  const beats = 'techno or electronic music parties that start before about 18:00 (day raves, open-air afternoon sessions, family raves)';
+  // Ordered by value: if the budget runs out, the later ones are skipped.
+  return [
+    { kind: family, q: `Wien Kinder Veranstaltungen Wochenende ${de(saturday)} ${de(sunday)} ${year}` },
+    { kind: beats, q: `Day Rave Wien ${de(saturday)} ${year}` },
+    { kind: family, q: `Kindertheater Wien ${de(saturday)} ${year}` },
+    { kind: beats, q: `Techno Open Air tagsüber Wien ${de(sunday)} ${year}` },
+    { kind: family, q: `Familienprogramm Museum Wien ${de(sunday)} ${year}` },
+    { kind: family, q: `Vienna family events weekend ${sat.date} ${sun.date} ${year}` },
+    { kind: family, q: `Wien Flohmarkt Fest Familie ${de(saturday)} ${year}` },
+  ];
+}
 
-I'm building a weekend guide for a family. Include two kinds of events:
+function searchPrompt({ saturday, sunday }, { kind, q }) {
+  return `Use web search to find ${kind} in Vienna, Austria on Saturday ${saturday} or Sunday ${sunday}.
 
-1. Family-oriented events: things parents can do with children. For example kids' theatre and puppet shows, museum family programmes and workshops, zoo or aquarium activities, markets, festivals, outdoor activities, children's concerts, and seasonal events.
-2. Techno or electronic music parties that happen during the daytime, meaning they start before about 18:00. Day raves, open-air afternoon sessions and family raves all count. Skip night-only club events.
+Start with this search: ${q}
+You may do one more search if it helps.
 
-Search widely. Good places to look include wien.info, events.wien.gv.at, the city's family pages, Falter, Resident Advisor, venue and museum websites (ZOOM Kindermuseum, Dschungel Wien, Tiergarten Schönbrunn, Haus des Meeres, Naturhistorisches Museum, Technisches Museum, MuseumsQuartier), and Viennese party listings. Search in both German and English.
+List every matching event you found. For each, give: title, date, start time (and end time if listed), venue and district, one sentence on what it is, age range if stated, ticket prices (adult and child if they differ) or that it's free, and the URL of the event's own listing.
 
-For each event, record:
-- title, date and start time (and end time if listed)
-- venue and district
-- a one or two sentence description
-- which kind it is (family, daytime electronic, or both)
-- age range if stated
-- ticket prices (adult and child prices if they differ), or that it is free
-- the URL of the event's own listing page, not a search results page
+Only include events the search results show taking place on ${saturday} or ${sunday}. Don't guess times, prices or URLs; leave out details you couldn't find. If you found nothing, reply "none".`;
+}
 
-Only include events you actually found on a web page and that really take place on ${saturday} or ${sunday}. Don't guess times, prices or URLs; leave a detail out if you couldn't confirm it. Ongoing exhibitions without a specific programme that weekend don't count. Aim for about 15 to 30 events across both days.
-
-Finish with the complete list of events and their details.`;
+function costOf(usage) {
+  return (
+    usage.input_tokens * PRICE.input +
+    usage.output_tokens * PRICE.output +
+    (usage.cache_creation_input_tokens ?? 0) * PRICE.cacheWrite +
+    (usage.cache_read_input_tokens ?? 0) * PRICE.cacheRead +
+    (usage.server_tool_use?.web_search_requests ?? 0) * PRICE.search
+  );
 }
 
 function textOf(message) {
   return message.content
     .filter((b) => b.type === 'text')
     .map((b) => b.text)
-    .join('\n')
+    .join('')
     .trim();
 }
 
@@ -51,45 +83,44 @@ function assertNotRefused(message, step) {
   }
 }
 
-/** Runs the web research and returns Claude's written findings. */
-async function research(client, weekend) {
-  const messages = [{ role: 'user', content: researchPrompt(weekend) }];
-  const tools = [
-    { type: 'web_search_20260209', name: 'web_search', max_uses: 30, user_location: { type: 'approximate', city: 'Vienna', country: 'AT', timezone: 'Europe/Vienna' } },
-    { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: 30 },
-  ];
-
-  for (let i = 0; ; i++) {
-    const message = await client.beta.messages
-      .stream({
-        model: MODEL,
-        max_tokens: 64000,
-        thinking: { type: 'adaptive' },
-        output_config: { effort: 'high' },
-        tools,
-        messages,
-        ...FALLBACK,
-      })
-      .finalMessage();
-
-    assertNotRefused(message, 'Research');
-    // The server pauses long web-tool loops; send the turn back to resume it.
-    if (message.stop_reason === 'pause_turn' && i < MAX_CONTINUATIONS) {
-      messages.push({ role: 'assistant', content: message.content });
-      continue;
+/** Runs the searches one by one while they fit the budget; returns the notes. */
+async function research(client, weekend, ledger) {
+  const notes = [];
+  let searchEstimate = SEARCH_ESTIMATE_USD;
+  for (const query of queries(weekend)) {
+    if (ledger.spent + searchEstimate + EXTRACT_RESERVE_USD > BUDGET_USD) {
+      console.log(`Stopping searches at $${ledger.spent.toFixed(3)} to stay under $${BUDGET_USD}.`);
+      break;
     }
+    const message = await client.messages.create({
+      model: MODEL,
+      max_tokens: 2000,
+      tools: [
+        {
+          type: 'web_search_20250305',
+          name: 'web_search',
+          max_uses: SEARCHES_PER_QUERY,
+          user_location: { type: 'approximate', city: 'Vienna', country: 'AT', timezone: 'Europe/Vienna' },
+        },
+      ],
+      messages: [{ role: 'user', content: searchPrompt(weekend, query) }],
+    });
+    const cost = costOf(message.usage);
+    ledger.add(`search: ${query.q}`, cost);
+    searchEstimate = Math.max(searchEstimate, cost);
+    assertNotRefused(message, 'Search');
     const text = textOf(message);
-    if (!text) throw new Error(`Research returned no text (stop_reason: ${message.stop_reason})`);
-    return text;
+    if (text && text.toLowerCase() !== 'none') notes.push(`## ${query.q}\n\n${text}`);
   }
+  return notes.join('\n\n');
 }
 
 /** Turns the research notes into the event list schema. */
-async function extract(client, notes, { saturday, sunday }) {
-  const message = await client.beta.messages.parse({
+async function extract(client, notes, { saturday, sunday }, ledger) {
+  const message = await client.messages.parse({
     model: MODEL,
-    max_tokens: 32000,
-    output_config: { effort: 'low', format: betaZodOutputFormat(EventListSchema) },
+    max_tokens: 6000,
+    output_config: { format: zodOutputFormat(EventListSchema) },
     messages: [
       {
         role: 'user',
@@ -97,6 +128,7 @@ async function extract(client, notes, { saturday, sunday }) {
 
 Rules:
 - Only include events dated ${saturday} or ${sunday}.
+- The same event may appear in several sections; include it once.
 - Times are 24-hour HH:MM in Vienna time. If an event runs all day, use its opening time.
 - Keep prices as written, formatted like "€12 adults · €6 kids". Use "Free" for free events and set is_free accordingly. Use null if the notes give no price.
 - Use the event's own listing URL from the notes. Leave out any event that has no URL.
@@ -107,9 +139,8 @@ ${notes}
 </notes>`,
       },
     ],
-    ...FALLBACK,
   });
-
+  ledger.add('extract', costOf(message.usage));
   assertNotRefused(message, 'Extraction');
   if (!message.parsed_output) throw new Error(`Extraction returned no parseable output (stop_reason: ${message.stop_reason})`);
   return message.parsed_output.events;
@@ -119,7 +150,19 @@ export async function findEvents(weekend) {
   // Keys that aren't scoped to a workspace need the workspace named on each request.
   const workspace = process.env.ANTHROPIC_WORKSPACE_ID;
   const client = new Anthropic(workspace ? { defaultHeaders: { 'anthropic-workspace-id': workspace } } : {});
-  const notes = await research(client, weekend);
-  const events = await extract(client, notes, weekend);
-  return { notes, events };
+
+  const ledger = {
+    spent: 0,
+    lines: [],
+    add(label, usd) {
+      this.spent += usd;
+      this.lines.push({ label, usd });
+      console.log(`$${usd.toFixed(4)}  ${label}  (total $${this.spent.toFixed(4)})`);
+    },
+  };
+
+  const notes = await research(client, weekend, ledger);
+  if (!notes) return { notes: '', events: [], cost: ledger };
+  const events = await extract(client, notes, weekend, ledger);
+  return { notes, events, cost: ledger };
 }

@@ -12,13 +12,22 @@ to the original listing.
 
 ## How it works
 
-1. `src/find-events.mjs` asks Claude (with web search and web fetch) to find
-   the weekend's events, then converts its findings into structured JSON.
+1. `src/find-events.mjs` runs a handful of short web searches with Claude
+   Haiku 4.5 (family events, kids' theatre, museums, markets, day raves),
+   then converts the findings into structured JSON.
 2. `src/events.mjs` drops events outside the weekend, without a valid link,
    or duplicated, and sorts the rest.
 3. `src/render.mjs` writes `site/index.html` (plus `site/events.json`).
 4. `.github/workflows/weekend.yml` runs this on Fridays and deploys `site/`
    to GitHub Pages. The research notes are kept as a workflow artifact for 30 days.
+
+## Cost
+
+Each call is priced from its token and search usage, and the run stops
+searching before it could go over **$0.30** (about €0.28). The
+per-call breakdown appears in the workflow run summary and in
+`events.json`. To change the cap, add a repository variable `MAX_COST_USD`
+(Settings → Secrets and variables → Actions → Variables).
 
 ## Setup
 

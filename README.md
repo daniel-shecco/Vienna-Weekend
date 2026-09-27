@@ -12,9 +12,9 @@ to the original listing.
 
 ## How it works
 
-1. `src/find-events.mjs` runs a handful of short web searches with Claude
-   Haiku 4.5 (family events, kids' theatre, museums, markets, day raves),
-   then converts the findings into structured JSON.
+1. `src/find-events.mjs` runs a few short web searches with Claude Sonnet 5
+   (family events, day raves, kids' theatre and museums), each allowed to read
+   one listing page, then converts the findings into structured JSON.
 2. `src/events.mjs` drops events outside the weekend, without a valid link,
    or duplicated, and sorts the rest.
 3. `src/render.mjs` writes `site/index.html` (plus `site/events.json`).
@@ -24,7 +24,7 @@ to the original listing.
 ## Cost
 
 Each call is priced from its token and search usage, and the run stops
-searching before it could go over **$0.30** (about €0.28). The
+searching before it could go over **$0.35** (about €0.30). The
 per-call breakdown appears in the workflow run summary and in
 `events.json`. To change the cap, add a repository variable `MAX_COST_USD`
 (Settings → Secrets and variables → Actions → Variables).

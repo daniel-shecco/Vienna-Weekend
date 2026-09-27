@@ -6,24 +6,27 @@ import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { EventListSchema } from './events.mjs';
 import { dayLabels } from './weekend.mjs';
 
-const MODEL = 'claude-haiku-4-5';
+const MODEL = 'claude-sonnet-5';
 
-// Claude Haiku 4.5 list prices, in USD.
+// Claude Sonnet 5 list prices, in USD.
 const PRICE = {
-  input: 1 / 1e6,
-  output: 5 / 1e6,
-  cacheWrite: 1.25 / 1e6,
-  cacheRead: 0.1 / 1e6,
+  input: 2 / 1e6,
+  output: 10 / 1e6,
+  cacheWrite: 2.5 / 1e6,
+  cacheRead: 0.2 / 1e6,
   search: 10 / 1000,
 };
 
-const BUDGET_USD = Number(process.env.MAX_COST_USD || 0.3);
+const BUDGET_USD = Number(process.env.MAX_COST_USD || 0.35);
 // Upper estimates used to decide whether another call still fits the budget.
-// The per-search estimate is raised to the most expensive search seen so far.
-const SEARCH_ESTIMATE_USD = 0.08;
-const EXTRACT_RESERVE_USD = 0.05;
+// The per-query estimate is raised to the most expensive query seen so far.
+const QUERY_ESTIMATE_USD = 0.12;
+const EXTRACT_RESERVE_USD = 0.06;
 
+// Per query: up to 2 searches and 1 page read, with the page trimmed to 6k tokens.
 const SEARCHES_PER_QUERY = 2;
+const FETCHES_PER_QUERY = 1;
+const FETCH_MAX_TOKENS = 6000;
 
 function queries({ saturday, sunday }) {
   const sat = dayLabels(saturday);
@@ -38,12 +41,9 @@ function queries({ saturday, sunday }) {
   // Ordered by value: if the budget runs out, the later ones are skipped.
   return [
     { kind: family, q: `Wien Kinder Veranstaltungen Wochenende ${de(saturday)} ${de(sunday)} ${year}` },
-    { kind: beats, q: `Day Rave Wien ${de(saturday)} ${year}` },
-    { kind: family, q: `Kindertheater Wien ${de(saturday)} ${year}` },
-    { kind: beats, q: `Techno Open Air tagsüber Wien ${de(sunday)} ${year}` },
-    { kind: family, q: `Familienprogramm Museum Wien ${de(sunday)} ${year}` },
+    { kind: beats, q: `Day Rave Techno tagsüber Wien ${de(saturday)} ${de(sunday)} ${year}` },
+    { kind: family, q: `Kindertheater Familienprogramm Museum Wien ${de(saturday)} ${year}` },
     { kind: family, q: `Vienna family events weekend ${sat.date} ${sun.date} ${year}` },
-    { kind: family, q: `Wien Flohmarkt Fest Familie ${de(saturday)} ${year}` },
   ];
 }
 
@@ -51,7 +51,7 @@ function searchPrompt({ saturday, sunday }, { kind, q }) {
   return `Use web search to find ${kind} in Vienna, Austria on Saturday ${saturday} or Sunday ${sunday}.
 
 Start with this search: ${q}
-You may do one more search if it helps.
+You may do one more search, and read one listing page (for example an event calendar) to confirm dates, times and prices.
 
 List every matching event you found. For each, give: title, date, start time (and end time if listed), venue and district, one sentence on what it is, age range if stated, ticket prices (adult and child if they differ) or that it's free, and the URL of the event's own listing.
 
@@ -86,28 +86,32 @@ function assertNotRefused(message, step) {
 /** Runs the searches one by one while they fit the budget; returns the notes. */
 async function research(client, weekend, ledger) {
   const notes = [];
-  let searchEstimate = SEARCH_ESTIMATE_USD;
+  let queryEstimate = QUERY_ESTIMATE_USD;
   for (const query of queries(weekend)) {
-    if (ledger.spent + searchEstimate + EXTRACT_RESERVE_USD > BUDGET_USD) {
+    if (ledger.spent + queryEstimate + EXTRACT_RESERVE_USD > BUDGET_USD) {
       console.log(`Stopping searches at $${ledger.spent.toFixed(3)} to stay under $${BUDGET_USD}.`);
       break;
     }
+    // max_tokens bounds output (incl. thinking); a paused turn is not resumed,
+    // so each query's cost stays bounded.
     const message = await client.messages.create({
       model: MODEL,
-      max_tokens: 2000,
+      max_tokens: 3000,
+      output_config: { effort: 'low' },
       tools: [
         {
-          type: 'web_search_20250305',
+          type: 'web_search_20260209',
           name: 'web_search',
           max_uses: SEARCHES_PER_QUERY,
           user_location: { type: 'approximate', city: 'Vienna', country: 'AT', timezone: 'Europe/Vienna' },
         },
+        { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: FETCHES_PER_QUERY, max_content_tokens: FETCH_MAX_TOKENS },
       ],
       messages: [{ role: 'user', content: searchPrompt(weekend, query) }],
     });
     const cost = costOf(message.usage);
     ledger.add(`search: ${query.q}`, cost);
-    searchEstimate = Math.max(searchEstimate, cost);
+    queryEstimate = Math.max(queryEstimate, cost);
     assertNotRefused(message, 'Search');
     const text = textOf(message);
     if (text && text.toLowerCase() !== 'none') notes.push(`## ${query.q}\n\n${text}`);
@@ -119,8 +123,8 @@ async function research(client, weekend, ledger) {
 async function extract(client, notes, { saturday, sunday }, ledger) {
   const message = await client.messages.parse({
     model: MODEL,
-    max_tokens: 6000,
-    output_config: { format: zodOutputFormat(EventListSchema) },
+    max_tokens: 4000,
+    output_config: { effort: 'low', format: zodOutputFormat(EventListSchema) },
     messages: [
       {
         role: 'user',

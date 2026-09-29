@@ -29,17 +29,37 @@ Find events in Vienna on that Saturday and Sunday of two kinds:
    activities, markets, festivals, outdoor activities, children's concerts,
    seasonal events).
 2. **Daytime electronic**: techno or electronic music parties that start
-   before about 18:00 (day raves, open-air afternoon sessions, family raves).
-   Skip night-only club events.
+   before about 18:00 (day raves, open-air afternoon sessions, family raves,
+   festivals with DJs). Skip night-only club events.
 
 Use WebSearch to find candidates and WebFetch to read the listing pages and
-confirm details. Good sources:
+confirm details. Many listings are only filled in towards the weekend, which
+is why this runs on Friday morning. Check these sources:
 
-- wien.gv.at/veranstaltungen/kinder, wien.info, falter.at/events (Kinder),
-  kinderkalender.at, wienxtra.at
-- dschungelwien.at, kindermuseum.at (ZOOM), zoovienna.at, haus-des-meeres.at,
-  nhm.at, technischesmuseum.at, wienmuseum.at, mqw.at
-- ra.co (Vienna listings) for daytime electronic events
+Family / kids
+- wien.gv.at/veranstaltungen/kinder (city calendar, free events)
+- kinderkalender.at/wien.html (open each event's page for venue and details)
+- wienxtra.at, falter.at/events (category Kinder & Jugend)
+- dschungelwien.at/spielplan, lilarum.at (puppet theatre)
+- wienmuseum.at/programme_kinder_und_familien, nhm.at, technischesmuseum.at,
+  kindermuseum.at (ZOOM), zoovienna.at, haus-des-meeres.at, mqw.at
+- langenacht.orf.at and similar one-off city events when they fall on the
+  weekend
+
+Music and electronic
+- goodnight.at/events: go through **all** categories (Alle, Party, Kultur,
+  Freizeit), not only raves. Pick up daytime techno/electronic parties,
+  other daytime music events (concerts, festivals, open airs) and anything
+  aimed at children or families.
+- goodnight.at/magazin (party and open-air round-ups)
+- warda.at/genre/techno/ (open each event for its start time)
+- 1000thingsmagazine.com (monthly "what's on in Vienna" overview)
+- ra.co blocks automated access; use WebSearch for its listings instead
+
+Classify each event as `family` (suitable for parents with children,
+including family-friendly daytime concerts), `daytime_electronic` (techno or
+electronic music starting before about 18:00) or `both`. Skip night-only
+club events and adult-only events that aren't electronic music.
 
 Rules:
 

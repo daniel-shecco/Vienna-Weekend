@@ -59,7 +59,8 @@ Music and electronic
 Classify each event as `family` (suitable for parents with children,
 including family-friendly daytime concerts), `daytime_electronic` (techno or
 electronic music starting before about 18:00) or `both`. Skip night-only
-club events and adult-only events that aren't electronic music.
+club events, and skip concerts and other events that are neither
+family-oriented nor electronic (e.g. a jazz matinee for adults).
 
 Rules:
 

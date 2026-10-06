@@ -27,7 +27,8 @@ Find events in Vienna on that Saturday and Sunday of two kinds:
 1. **Family-oriented**: things parents can do with children (kids' theatre and
    puppet shows, museum family programmes and workshops, zoo/aquarium
    activities, markets, festivals, outdoor activities, children's concerts,
-   seasonal events).
+   seasonal events), including **street festivals and flea markets**
+   (Straßenfeste, Grätzlfeste, Bezirksfeste, Kirtage, Flohmärkte).
 2. **Daytime electronic**: techno or electronic music parties that start
    before about 18:00 (day raves, open-air afternoon sessions, family raves,
    festivals with DJs). Skip night-only club events.
@@ -45,6 +46,17 @@ Family / kids
   kindermuseum.at (ZOOM), zoovienna.at, haus-des-meeres.at, mqw.at
 - langenacht.orf.at and similar one-off city events when they fall on the
   weekend
+
+Street festivals and flea markets (search in German: Straßenfest,
+Grätzlfest, Bezirksfest, Kirtag, Flohmarkt, Kinderflohmarkt + the date)
+- wien.gv.at/freizeit/privatmaerkte (city list of Kirtage, festivals and
+  occasional markets)
+- flohmarkt.at/flohmaerkte/wien, flohmarkt-kalender.at/wien
+- goodnight.at/magazin/freizeit/strassenfeste-wien,
+  1000thingsmagazine.com (Grätzl- und Straßenfeste),
+  ganz-wien.at (Straßenmärkte, Grätzl- und Straßenfeste)
+- Only flea markets inside Vienna; skip regular antique/trade markets aimed
+  at dealers. Give the opening hours as start and end time.
 
 Music and electronic
 - goodnight.at/events: go through **all** categories (Alle, Party, Kultur,

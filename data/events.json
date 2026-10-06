@@ -4,7 +4,7 @@
     "sunday": "2026-10-11"
   },
   "status": "done",
-  "updated": "Tue 6 Oct, 08:49",
+  "updated": "Tue 6 Oct, 09:06",
   "events": [
     {
       "title": "Kreativer Samstag: kids' creative workshops",
@@ -187,6 +187,76 @@
       "price": "Free",
       "is_free": true,
       "url": "https://www.dschungelwien.at/event/how-to-make-a-dream-come-true"
+    },
+    {
+      "title": "Flea market at the Naschmarkt",
+      "date": "2026-10-10",
+      "start_time": "06:30",
+      "end_time": "15:00",
+      "venue": "Naschmarkt, at Kettenbrückengasse",
+      "district": "6th district, Mariahilf",
+      "description": "Vienna's classic Saturday flea market with second-hand goods, curiosities and rarities.",
+      "category": "family",
+      "age_range": "All ages",
+      "price": null,
+      "is_free": false,
+      "url": "https://flohmarkt-kalender.at/markt/flohmarkt-beim-naschmarkt-2026-10-10"
+    },
+    {
+      "title": "Kids' second-hand market by the Augarten",
+      "date": "2026-10-10",
+      "start_time": "10:00",
+      "end_time": "13:00",
+      "venue": "Pfarre St. Leopold (lower church), Alexander-Poch-Platz 6",
+      "district": "2nd district, Leopoldstadt",
+      "description": "Indoor market for second-hand children's clothes, toys and family gear.",
+      "category": "family",
+      "age_range": "Families",
+      "price": null,
+      "is_free": false,
+      "url": "https://flohmarkt-kalender.at/markt/kindersachenmarkt-beim-augarten-2026-10-10"
+    },
+    {
+      "title": "Baby and kids' flea market in Floridsdorf",
+      "date": "2026-10-10",
+      "start_time": "12:00",
+      "end_time": "14:00",
+      "venue": "Prager Straße 56",
+      "district": "21st district, Floridsdorf",
+      "description": "Second-hand baby and children's clothes, toys and family equipment.",
+      "category": "family",
+      "age_range": "Families",
+      "price": null,
+      "is_free": false,
+      "url": "https://flohmarkt-kalender.at/markt/baby-und-kinderflohmarkt-in-floridsdorf-2026-10-10"
+    },
+    {
+      "title": "Giant flea market at Wienerberg",
+      "date": "2026-10-11",
+      "start_time": "07:00",
+      "end_time": "13:00",
+      "venue": "BILLA Plus car park, Wienerbergstraße 27",
+      "district": "10th district, Favoriten",
+      "description": "A large Sunday-morning flea market in the open air.",
+      "category": "family",
+      "age_range": "All ages",
+      "price": null,
+      "is_free": false,
+      "url": "https://flohmarkt-kalender.at/markt/riesenflohmarkt-wienerberg-2026-10-11"
+    },
+    {
+      "title": "MetaMarkt indoor flea market",
+      "date": "2026-10-11",
+      "start_time": "08:00",
+      "end_time": "15:00",
+      "venue": "MetaStadt, Stadlauer Straße 41A",
+      "district": "22nd district, Donaustadt",
+      "description": "A big weatherproof flea market inside a hall.",
+      "category": "family",
+      "age_range": "All ages",
+      "price": "Free",
+      "is_free": true,
+      "url": "https://flohmarkt-kalender.at/markt/metamarkt-hallenflohmarkt-2026-10-11"
     }
   ]
 }

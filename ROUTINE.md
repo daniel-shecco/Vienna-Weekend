@@ -42,10 +42,21 @@ Family / kids
 - kinderkalender.at/wien.html (open each event's page for venue and details)
 - wienxtra.at, falter.at/events (category Kinder & Jugend)
 - dschungelwien.at/spielplan, lilarum.at (puppet theatre)
-- wienmuseum.at/programme_kinder_und_familien, nhm.at, technischesmuseum.at,
-  kindermuseum.at (ZOOM), zoovienna.at, haus-des-meeres.at, mqw.at
+- zoovienna.at, haus-des-meeres.at, mqw.at
 - langenacht.orf.at and similar one-off city events when they fall on the
   weekend
+
+Museum events for families and children (check each museum's family /
+kids' programme for workshops, family tours, kids' tours and special
+weekend events; ordinary opening hours and permanent exhibitions don't count)
+- wienmuseum.at/programme_kinder_und_familien
+- nhm.at (Naturhistorisches Museum), technischesmuseum.at
+- khm.at (Kunsthistorisches Museum, incl. Schatzkammer and Weltmuseum)
+- kindermuseum.at (ZOOM), kindermuseum.at Schloss Schönbrunn
+  (kaiserkinder.at), hdm.at (Haus der Musik)
+- albertina.at, belvedere.at, mak.at, mumok.at, leopoldmuseum.org,
+  kunsthallewien.at, jmw.at (Jüdisches Museum)
+- search "Familienführung Wien" / "Kinderführung Museum Wien" + the date
 
 Street festivals and flea markets (search in German: Straßenfest,
 Grätzlfest, Bezirksfest, Kirtag, Flohmarkt, Kinderflohmarkt + the date)

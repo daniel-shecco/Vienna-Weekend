@@ -57,6 +57,16 @@ weekend events; ordinary opening hours and permanent exhibitions don't count)
 - albertina.at, belvedere.at, mak.at, mumok.at, leopoldmuseum.org,
   kunsthallewien.at, jmw.at (Jüdisches Museum)
 - search "Familienführung Wien" / "Kinderführung Museum Wien" + the date
+- **Planetarium Wien** (vhs.at/de/e/planetarium, programme at
+  vhs.at/de/e/planetarium/veranstaltungen): add its kids' and family shows
+  (e.g. "Elsa und der große Bär", "Polaris", "Die Sternenmachmaschine",
+  "Mission Weltall", "Space4Kids"); skip the evening shows for adults.
+  vhs.at blocks WebFetch (Cloudflare, 403), so read the schedule with
+  WebSearch, e.g. "Planetarium Wien Programm <Samstag-Datum>" and
+  "... <Sonntag-Datum>", and only use show times that come from the vhs.at
+  listing. Link each show to https://www.vhs.at/de/e/planetarium/veranstaltungen
+  (or the show's own vhs.at page if the search gives one). Venue: Planetarium
+  Wien, Oswald-Thomas-Platz 1, 2nd district, Leopoldstadt (Prater).
 
 Street festivals and flea markets (search in German: Straßenfest,
 Grätzlfest, Bezirksfest, Kirtag, Flohmarkt, Kinderflohmarkt + the date)

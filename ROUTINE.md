@@ -56,6 +56,17 @@ Kids' theatre (Kindertheater, Puppentheater, Kasperl, Märchen; search
 - theaterspielplan.at, kinder-kalender.at/kinderkalender-wien-buehne1.html
   (overviews of children's stages)
 
+Family music events (kids' concerts, family concerts, sing-alongs, baby
+concerts, children's operas and musicals; search "Kinderkonzert Wien <date>",
+"Familienkonzert Wien <date>", "Babykonzert Wien <date>" too)
+- hdm.at/en/concerts (Haus der Musik, "Classic Cool!" series)
+- konzerthaus.at and musikverein.at (concerts for young audiences)
+- muth.at (Wiener Sängerknaben hall), jeunesse.at (kids' series)
+- wiener-staatsoper.at and volksoper.at (children's operas, family shows)
+- kinderkonzerte.wien (kids' and baby concerts)
+- daytime open-air or park concerts aimed at families
+- Mark these `family`. Concerts for adults only are still skipped.
+
 Gaming (video games, e-sports, board games, comic/pop-culture cons)
 - search "Gaming Event Wien <date>", "Brettspiel Wien <date>",
   "Spielefest", "Esports Festival", "Vienna Comic Con", "FROG Gaming"

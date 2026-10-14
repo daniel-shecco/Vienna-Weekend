@@ -46,6 +46,38 @@ Family / kids
 - langenacht.orf.at and similar one-off city events when they fall on the
   weekend
 
+Kids' theatre (Kindertheater, Puppentheater, Kasperl, Märchen; search
+"Kindertheater Wien <date>" too)
+- dschungelwien.at/spielplan, tdj.at (Theater der Jugend: Renaissancetheater
+  and Theater im Zentrum), lilarum.at
+- maerchenbuehne.at/spielplan.html (Märchenbühne Der Apfelbaum)
+- kasperlundpezi.at (Urania Puppentheater), Puppenbühne der Wiener
+  Kinderfreunde, Brailli Bär Kindertheater
+- theaterspielplan.at, kinder-kalender.at/kinderkalender-wien-buehne1.html
+  (overviews of children's stages)
+
+Gaming (video games, e-sports, board games, comic/pop-culture cons)
+- search "Gaming Event Wien <date>", "Brettspiel Wien <date>",
+  "Spielefest", "Esports Festival", "Vienna Comic Con", "FROG Gaming"
+- videospielen.at/events, dailygame.at, viecc.com
+- Game City (normally October at the Rathaus) is paused in 2026 according
+  to meinbezirk.at and heute.at; only list it if its own site confirms a date.
+- Include gaming events that families or kids/teens can attend; mark them
+  `family`. Skip 18+ events.
+
+City of Vienna events (Stadt Wien) at the Rathaus, Rathausplatz or anywhere
+in the city
+- wien.gv.at/veranstaltungen (all highlights), wien.gv.at/veranstaltungen/herbst
+  (and /fruehling, /sommer, /winter by season), wien.gv.at/veranstaltungen/kinder
+- Rathausplatz and Rathaus events: 1000thingsmagazine.com (Rathausplatz
+  overview), ganz-wien.at/veranstaltungen/rathausplatz.html,
+  falter.at/location/13/rathausplatz
+- wienxtra.at (the city's youth and kids' programme)
+- Include free city festivals, Rathaus open days, markets and similar
+  events that suit families.
+- wien.gv.at often times out on WebFetch; if it does, use WebSearch for
+  "wien.gv.at Veranstaltungen <date>" and confirm on another listing.
+
 Museum events for families and children (check each museum's family /
 kids' programme for workshops, family tours, kids' tours and special
 weekend events; ordinary opening hours and permanent exhibitions don't count)

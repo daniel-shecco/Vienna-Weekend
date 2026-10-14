@@ -31,7 +31,8 @@ Find events in Vienna on that Saturday and Sunday of two kinds:
    (Straßenfeste, Grätzlfeste, Bezirksfeste, Kirtage, Flohmärkte).
 2. **Daytime electronic**: techno or electronic music parties that start
    before about 18:00 (day raves, open-air afternoon sessions, family raves,
-   festivals with DJs). Skip night-only club events.
+   festivals with DJs, daytime psytrance/goa parties). Skip night-only club
+   events.
 
 Use WebSearch to find candidates and WebFetch to read the listing pages and
 confirm details. Many listings are only filled in towards the weekend, which
@@ -131,6 +132,13 @@ Music and electronic
 - warda.at/genre/techno/ (open each event for its start time)
 - 1000thingsmagazine.com (monthly "what's on in Vienna" overview)
 - ra.co blocks automated access; use WebSearch for its listings instead
+- Psytrance / goa: goabase.net/party/?geoloc=Wien (open each party page for
+  start time, venue and price; the list covers 100 km around Vienna, so keep
+  only parties inside Vienna). Also search "Psytrance Wien <date>",
+  "Goa Party Wien <date>", "Psy Open Air Wien <date>". goabase listings are
+  entered by organisers, so prefer ones that also appear on the organiser's
+  or venue's own page. Mark them `daytime_electronic` when they start before
+  about 18:00.
 
 Classify each event as `family` (suitable for parents with children,
 including family-friendly daytime concerts), `daytime_electronic` (techno or

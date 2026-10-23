@@ -90,6 +90,17 @@ in the city
 - wien.gv.at often times out on WebFetch; if it does, use WebSearch for
   "wien.gv.at Veranstaltungen <date>" and confirm on another listing.
 
+Halloween for kids (the weekend around 31 October)
+- Kids' Halloween parties, costume parades, pumpkin carving, trick-or-treat
+  walks, spooky museum/zoo/aquarium programmes, Halloween kids' theatre and
+  Kasperl shows, and family events at the Prater.
+- Search "Halloween Kinder Wien <date>", "Halloween Familie Wien <date>",
+  "Kürbisschnitzen Wien <date>", "Kinder Halloween Party Wien"; also check
+  kinderkalender.at, wienxtra.at, goodnight.at (Halloween round-ups),
+  1000thingsmagazine.com, zoovienna.at, haus-des-meeres.at, prater.at.
+- Only include events meant for children or families (skip 18+ horror
+  parties and club nights). Mark them `family`.
+
 Christmas markets (Christkindlmärkte, Adventmärkte, Weihnachtsmärkte;
 season roughly early November to 6 January)
 - Include every Christmas market in Vienna that is open that weekend, e.g.

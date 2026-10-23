@@ -90,6 +90,36 @@ in the city
 - wien.gv.at often times out on WebFetch; if it does, use WebSearch for
   "wien.gv.at Veranstaltungen <date>" and confirm on another listing.
 
+Christmas markets (Christkindlmärkte, Adventmärkte, Weihnachtsmärkte;
+season roughly early November to 6 January)
+- Include every Christmas market in Vienna that is open that weekend, e.g.
+  Rathausplatz (Wiener Christkindlmarkt, incl. its kids' programme and
+  Eistraum), Schönbrunn, Belvedere, Spittelberg, Freyung (Altwiener
+  Christkindlmarkt), Am Hof, Karlsplatz (Art Advent), Stephansplatz,
+  Maria-Theresien-Platz, Riesenradplatz (Prater), Türkenschanzpark,
+  Campus Altes AKH and district markets.
+- Sources: the markets' own sites (e.g. christkindlmarkt.at), wien.info
+  (Christmas markets overview), wien.gv.at/freizeit/privatmaerkte
+  (Weihnachtsmärkte list), plus WebSearch "Weihnachtsmarkt Wien <date>".
+  Take opening hours from the market's own site; sources often disagree.
+- These run for weeks, so list each market once per weekend: on Saturday
+  with Saturday's opening hours, and say "also open Sunday <hours>" in the
+  description (list it on Sunday instead only if it's closed on Saturday).
+  Mention kids' activities (workshops, carousels, ice rinks, Christkind
+  visits, Krampus runs) and any special programme that weekend. Mark them
+  `family`; the market opening day itself is worth a mention in the title.
+
+Ticket platforms (family/kids shows: circus, musicals, Disney, ice shows,
+kids' theatre, magic shows, family concerts)
+- wien-ticket.at (sections Freizeit, Musicals & Shows; readable directly),
+  oeticket.com (often returns 503 to WebFetch: use WebSearch
+  "oeticket Wien Familie <date>" / "oeticket Kinder Wien <date>"),
+  eventim-light.com, jetticket.net shops, ticket.io, events.at, eventbrite
+  (Vienna, family/kids), falter.at/events (Kinder & Jugend).
+- Only include shows with a performance on that Saturday or Sunday, and
+  confirm the date and time on the ticket page or the organiser's page.
+  Mark them `family`.
+
 Arena Wien Open Air and anything at the Rathaus (`highlight`)
 - arena.co.at (Arena Wien programme; open-air season roughly May to
   September): include every Arena Wien open-air event that weekend, even
@@ -168,7 +198,7 @@ Rules:
 - Only include events you confirmed on a web page for those exact dates.
 - Don't guess times, prices or URLs. Use `null` for anything you couldn't
   confirm. Ongoing exhibitions without a specific programme that weekend
-  don't count.
+  don't count (Christmas markets are the exception, see above).
 - `url` must be the event's own listing page, not a search page.
 - Aim for 15–30 events. Spend at most about 30 minutes.
 

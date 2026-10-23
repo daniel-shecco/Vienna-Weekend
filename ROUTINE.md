@@ -30,7 +30,7 @@ Find events in Vienna on that Saturday and Sunday of two kinds:
    seasonal events), including **street festivals and flea markets**
    (Straßenfeste, Grätzlfeste, Bezirksfeste, Kirtage, Flohmärkte).
 2. **Daytime electronic**: techno or electronic music parties that start
-   before about 18:00 (day raves, open-air afternoon sessions, family raves,
+   before 19:00 (day raves, open-air afternoon sessions, family raves,
    festivals with DJs, daytime psytrance/goa parties). Skip night-only club
    events.
 
@@ -172,8 +172,9 @@ Grätzlfest, Bezirksfest, Kirtag, Flohmarkt, Kinderflohmarkt + the date)
 - goodnight.at/magazin/freizeit/strassenfeste-wien,
   1000thingsmagazine.com (Grätzl- und Straßenfeste),
   ganz-wien.at (Straßenmärkte, Grätzl- und Straßenfeste)
-- Only flea markets inside Vienna; skip regular antique/trade markets aimed
-  at dealers. Give the opening hours as start and end time.
+- Include every flea market inside Vienna that opens before 19:00
+  (antique, book and car-park markets too). Give the opening hours as start
+  and end time.
 
 Music and electronic
 - goodnight.at/events: go through **all** categories (Alle, Party, Kultur,
@@ -187,20 +188,20 @@ Music and electronic
 - Du Tanzt Mich Mal (Vienna house/techno collective, often afternoon
   open-airs): dutanztmichmal.at/events, warda.at (search "du tanzt mich mal"),
   their Instagram/Facebook via WebSearch. Include their parties that start
-  before about 18:00 as `daytime_electronic`.
+  before 19:00 as `daytime_electronic`.
 - Psytrance / goa: goabase.net/party/?geoloc=Wien (open each party page for
   start time, venue and price; the list covers 100 km around Vienna, so keep
   only parties inside Vienna). Also search "Psytrance Wien <date>",
   "Goa Party Wien <date>", "Psy Open Air Wien <date>". goabase listings are
   entered by organisers, so prefer ones that also appear on the organiser's
   or venue's own page. Mark them `daytime_electronic` when they start before
-  about 18:00.
+  19:00.
 
 Classify each event as `highlight` only for Arena Wien Open Air and
 Rathaus events that aren't family-oriented (see above). Otherwise classify it
 as `family` (suitable for parents with children,
 including family-friendly daytime concerts), `daytime_electronic` (techno or
-electronic music starting before about 18:00) or `both`. Skip night-only
+electronic music starting before 19:00) or `both`. Skip night-only
 club events, and skip concerts and other events that are neither
 family-oriented nor electronic (e.g. a jazz matinee for adults).
 
@@ -211,7 +212,11 @@ Rules:
   confirm. Ongoing exhibitions without a specific programme that weekend
   don't count (Christmas markets are the exception, see above).
 - `url` must be the event's own listing page, not a search page.
-- Aim for 15–30 events. Spend at most about 30 minutes.
+- **Don't trim the list.** Include every matching event that starts before
+  19:00, however many there are (sold-out shows too, marked "Sold out" in
+  the price). Events starting at 19:00 or later are left out, except
+  daytime events that simply run past 19:00.
+- Spend as long as the research needs; note any source that failed.
 
 ## 4. Publish
 

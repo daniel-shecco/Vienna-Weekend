@@ -172,9 +172,11 @@ Grätzlfest, Bezirksfest, Kirtag, Flohmarkt, Kinderflohmarkt + the date)
 - goodnight.at/magazin/freizeit/strassenfeste-wien,
   1000thingsmagazine.com (Grätzl- und Straßenfeste),
   ganz-wien.at (Straßenmärkte, Grätzl- und Straßenfeste)
-- Include every flea market inside Vienna that opens before 19:00
-  (antique, book and car-park markets too). Give the opening hours as start
-  and end time.
+- Only include flea markets (Flohmärkte, kids' second-hand markets, antique
+  and book markets) in the **5th, 6th, 7th and 15th districts** (Margareten,
+  Mariahilf, Neubau, Rudolfsheim-Fünfhaus; postcodes 1050, 1060, 1070,
+  1150). Within those districts, include every one that opens before 19:00.
+  Give the opening hours as start and end time.
 
 Music and electronic
 - goodnight.at/events: go through **all** categories (Alle, Party, Kultur,

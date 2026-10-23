@@ -10,6 +10,8 @@
     --family-soft: #e3f3ea;
     --beats: #5b3fd1;
     --beats-soft: #ece8fc;
+    --more: #9a3412;
+    --more-soft: #fdeee4;
     --free: #8a5a00;
     --free-soft: #fcf1d9;
     --shadow: 0 1px 2px rgba(31,26,23,.06), 0 4px 16px rgba(31,26,23,.05);
@@ -20,6 +22,8 @@
       --accent: #ff5a6e; --accent-soft: #3a1c21;
       --family: #5fd3a0; --family-soft: #16302a;
       --beats: #a996ff; --beats-soft: #241f3f;
+    --more: #fdba8c; --more-soft: #3a2418;
+      --more: #fdba8c; --more-soft: #3a2418;
       --free: #f2c46b; --free-soft: #33280f;
       --shadow: none;
     }
@@ -29,6 +33,7 @@
     --accent: #ff5a6e; --accent-soft: #3a1c21;
     --family: #5fd3a0; --family-soft: #16302a;
     --beats: #a996ff; --beats-soft: #241f3f;
+    --more: #fdba8c; --more-soft: #3a2418;
     --free: #f2c46b; --free-soft: #33280f;
     --shadow: none;
   }
@@ -95,6 +100,7 @@
   .tag { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
   .tag.family { background: var(--family-soft); color: var(--family); }
   .tag.beats  { background: var(--beats-soft);  color: var(--beats); }
+  .tag.more   { background: var(--more-soft);   color: var(--more); }
   .tag.age    { background: transparent; color: var(--muted); border: 1px solid var(--line); }
   .price { font-size: 14px; font-weight: 600; }
   .price.free { color: var(--free); background: var(--free-soft); padding: 3px 9px; border-radius: 999px; font-size: 12px; }

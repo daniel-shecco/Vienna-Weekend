@@ -9,14 +9,14 @@
 //     "venue": "Karmelitermarkt",
 //     "district": "2nd district, Leopoldstadt",   // or null
 //     "description": "One or two plain sentences.",
-//     "category": "family",              // "family" | "daytime_electronic" | "both"
+//     "category": "family",              // "family" | "daytime_electronic" | "both" | "highlight"
 //     "age_range": "All ages",           // or null
 //     "price": "Free",                   // e.g. "€12 adults · €6 kids", or null
 //     "is_free": true,
 //     "url": "https://…"                 // the event's own listing
 //   }
 
-const CATEGORIES = new Set(['family', 'daytime_electronic', 'both']);
+const CATEGORIES = new Set(['family', 'daytime_electronic', 'both', 'highlight']);
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 /**

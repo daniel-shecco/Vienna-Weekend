@@ -57,7 +57,7 @@ Kids' theatre (Kindertheater, Puppentheater, Kasperl, Märchen; search
 - theaterspielplan.at, kinder-kalender.at/kinderkalender-wien-buehne1.html
   (overviews of children's stages)
 
-Family music events (kids' concerts, family concerts, sing-alongs, baby
+Family music events and **kids' concerts** (Kinderkonzerte, family concerts, sing-alongs, baby
 concerts, children's operas and musicals; search "Kinderkonzert Wien <date>",
 "Familienkonzert Wien <date>", "Babykonzert Wien <date>" too)
 - hdm.at/en/concerts (Haus der Musik, "Classic Cool!" series)
@@ -89,6 +89,17 @@ in the city
   events that suit families.
 - wien.gv.at often times out on WebFetch; if it does, use WebSearch for
   "wien.gv.at Veranstaltungen <date>" and confirm on another listing.
+
+Arena Wien Open Air and anything at the Rathaus (`highlight`)
+- arena.co.at (Arena Wien programme; open-air season roughly May to
+  September): include every Arena Wien open-air event that weekend, even
+  adult concerts and evening shows.
+- Rathaus / Rathausplatz: include **every** public event there that weekend
+  (festivals, markets, concerts, film festival, ice rink, open days), using
+  the City of Vienna sources above.
+- Mark family-suitable ones `family`; everything else from these two venues
+  `highlight` (shown under "Other highlights" on the page). This overrides
+  the "skip non-family concerts" rule for these two venues only.
 
 Museum events for families and children (check each museum's family /
 kids' programme for workshops, family tours, kids' tours and special
@@ -132,6 +143,10 @@ Music and electronic
 - warda.at/genre/techno/ (open each event for its start time)
 - 1000thingsmagazine.com (monthly "what's on in Vienna" overview)
 - ra.co blocks automated access; use WebSearch for its listings instead
+- Du Tanzt Mich Mal (Vienna house/techno collective, often afternoon
+  open-airs): dutanztmichmal.at/events, warda.at (search "du tanzt mich mal"),
+  their Instagram/Facebook via WebSearch. Include their parties that start
+  before about 18:00 as `daytime_electronic`.
 - Psytrance / goa: goabase.net/party/?geoloc=Wien (open each party page for
   start time, venue and price; the list covers 100 km around Vienna, so keep
   only parties inside Vienna). Also search "Psytrance Wien <date>",
@@ -140,7 +155,9 @@ Music and electronic
   or venue's own page. Mark them `daytime_electronic` when they start before
   about 18:00.
 
-Classify each event as `family` (suitable for parents with children,
+Classify each event as `highlight` only for Arena Wien Open Air and
+Rathaus events that aren't family-oriented (see above). Otherwise classify it
+as `family` (suitable for parents with children,
 including family-friendly daytime concerts), `daytime_electronic` (techno or
 electronic music starting before about 18:00) or `both`. Skip night-only
 club events, and skip concerts and other events that are neither
@@ -177,7 +194,7 @@ Write `data/events.json` with `"status": "done"`, the same `weekend` and
 }
 ```
 
-`category` is `family`, `daytime_electronic` or `both`. Prices are written
+`category` is `family`, `daytime_electronic`, `both` or `highlight`. Prices are written
 like `€12 adults · €6 kids`.
 
 Then check it locally before pushing:

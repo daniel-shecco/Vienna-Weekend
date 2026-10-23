@@ -45,3 +45,13 @@ test('renderStatusPage shows a self-refreshing searching page and a static failu
   assert.ok(!failed.includes('http-equiv="refresh"'));
   assert.ok(failed.includes('didn’t finish'));
 });
+
+test('highlight events get their own tag and filter chip', () => {
+  const events = cleanEvents(structuredClone(fixture.events), fixture.weekend);
+  events[0].category = 'highlight';
+  const html = renderPage({ weekend: fixture.weekend, events, updated: 'Fri 2 Oct, 07:00' });
+  assert.ok(html.includes('class="tag more"'));
+  assert.ok(html.includes('data-filter="more"'));
+  const plain = renderPage({ weekend: fixture.weekend, events: cleanEvents(structuredClone(fixture.events), fixture.weekend), updated: 'x' });
+  assert.ok(!plain.includes('data-filter="more"'));
+});

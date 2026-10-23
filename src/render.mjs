@@ -14,6 +14,7 @@ function cats(ev) {
   const c = [];
   if (ev.category === 'family' || ev.category === 'both') c.push('family');
   if (ev.category === 'daytime_electronic' || ev.category === 'both') c.push('beats');
+  if (ev.category === 'highlight') c.push('more');
   if (ev.is_free) c.push('free');
   return c;
 }
@@ -22,6 +23,7 @@ function eventHtml(ev) {
   const c = cats(ev);
   const tags = [
     c.includes('beats') ? '<span class="tag beats">Daytime electronic</span>' : '',
+    c.includes('more') ? '<span class="tag more">Highlight</span>' : '',
     c.includes('family') ? '<span class="tag family">Family</span>' : '',
     ev.age_range ? `<span class="tag age">${esc(ev.age_range)}</span>` : '',
     ev.is_free
@@ -101,6 +103,7 @@ ${CSS}</style>
     ${chip('all', 'All', events.length, true)}
     ${chip('family', 'Family', count('family'))}
     ${chip('beats', 'Daytime electronic', count('beats'))}
+    ${count('more') ? chip('more', 'Other highlights', count('more')) : ''}
     ${chip('free', 'Free', count('free'))}
   </nav>
 

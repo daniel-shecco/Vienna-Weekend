@@ -154,6 +154,11 @@ Kids' workshops (robotics, coding, woodwork, crafts, science/experiments,
 - one-off weekend workshops by makerspaces, DIY and woodwork studios,
   hardware stores (e.g. Hornbach/Bauhaus kids' workshops in Vienna), toy
   and LEGO stores, libraries and Volkshochschulen (vhs.at, kids' courses)
+- Only include workshops that are open to children aged 4 (minimum age 4
+  or lower, e.g. "ab 3", "ab 4", "4–7 Jahre"). Leave out workshops whose
+  minimum age is above 4 (e.g. "ab 6", "ab 7", "ab 8", "7–12 Jahre"), and
+  ones with no stated age unless the page clearly says they suit
+  preschoolers. Put the age range in `age_range`.
 - Only include single-session workshops on that Saturday or Sunday that
   anyone can book; skip multi-week courses. Note "booking required" or
   "fully booked" in the description or price. Mark them `family`.

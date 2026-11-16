@@ -142,6 +142,22 @@ Arena Wien Open Air and anything at the Rathaus (`highlight`)
   `highlight` (shown under "Other highlights" on the page). This overrides
   the "skip non-family concerts" rule for these two venues only.
 
+Kids' workshops (robotics, coding, woodwork, crafts, science/experiments,
+3D printing, electronics, baking, art; search "Kinderworkshop Wien <date>",
+"Robotik Workshop Kinder Wien", "Holzwerkstatt Kinder Wien",
+"Programmieren Kinder Workshop Wien", "Experimente Kinder Wien" too)
+- technischesmuseum.at (robotics and tech workshops), viennaopenlab.at
+  (lab courses for families), hauptbuecherei / büchereien.wien.at (makerspace,
+  coding), happylab.at (makerspace kids' courses), wienxtra.at (kids' workshops)
+- kinderkalender.at and falter.at/events (Kinder & Jugend, category
+  Workshops), mamilade.at/wien (workshops & Führungen)
+- one-off weekend workshops by makerspaces, DIY and woodwork studios,
+  hardware stores (e.g. Hornbach/Bauhaus kids' workshops in Vienna), toy
+  and LEGO stores, libraries and Volkshochschulen (vhs.at, kids' courses)
+- Only include single-session workshops on that Saturday or Sunday that
+  anyone can book; skip multi-week courses. Note "booking required" or
+  "fully booked" in the description or price. Mark them `family`.
+
 Museum events for families and children (check each museum's family /
 kids' programme for workshops, family tours, kids' tours and special
 weekend events; ordinary opening hours and permanent exhibitions don't count)
